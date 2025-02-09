@@ -88,4 +88,17 @@ export const AuthController = {
       },
     });
   }),
+
+  logout: catchAsync(async (_req, res) => {
+    res.clearCookie('refreshToken', {
+      secure: config.node_env !== 'development',
+      httpOnly: true,
+    });
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Logged out successfully',
+    });
+  }),
 };
