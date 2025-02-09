@@ -1,10 +1,10 @@
-import { TAdmin } from '../app/modules/admin/Admin.interface';
+import IUser from '../app/modules/user/User.interface';
 
 declare global {
   namespace Express {
     interface Request {
-      // user: JwtPayload;
-      admin?: Partial<TAdmin>;
+      user?: IUser;
+      authData?: Record<any, any>;
     }
   }
 }
