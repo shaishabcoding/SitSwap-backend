@@ -26,7 +26,10 @@ import { catchAsyncWithCallback } from '../../shared/catchAsync';
  *
  * @throws {ApiError} If the file upload fails or if the uploaded file is not an image.
  */
-const imageUploader = (callback: (req: Request, images: string[]) => void) => {
+const imageUploader = (
+  callback: (req: Request, images: string[]) => void,
+  isOptional: boolean = false,
+) => {
   const baseUploadDir = path.join(process.cwd(), 'uploads');
 
   if (!fs.existsSync(baseUploadDir)) {
@@ -85,8 +88,12 @@ const imageUploader = (callback: (req: Request, images: string[]) => void) => {
           (file: { filename: string }) => `/images/${file.filename}`,
         ) || [];
 
-      if (!images.length)
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'No images uploaded');
+      if (!images.length) {
+        if (!isOptional)
+          throw new ApiError(StatusCodes.BAD_REQUEST, 'No images uploaded');
+
+        return next();
+      }
 
       callback(req, images);
       next();
