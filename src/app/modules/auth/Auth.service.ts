@@ -6,6 +6,9 @@ import { jwtHelper } from '../../../helpers/jwtHelper';
 import config from '../../../config';
 import IUser from '../user/User.interface';
 import { Secret } from 'jsonwebtoken';
+import { sendEmail } from '../../../helpers/sendMail';
+import { makeResetBody } from './Auth.constant';
+import { Request } from 'express';
 
 export const AuthService = {
   login: async (email: string, password: string) => {
@@ -48,7 +51,7 @@ export const AuthService = {
     await user.save();
   },
 
-  /** This will make a accessToken if refreshToken is valid. */
+  // ^ This will make a accessToken if refreshToken is valid.
   refreshToken: async (token: string) => {
     if (!token) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Access Denied!');
 
@@ -68,5 +71,43 @@ export const AuthService = {
     );
 
     return { accessToken };
+  },
+
+  forgetPassword: async (email: string) => {
+    const user = await User.findOne({
+      email,
+    });
+
+    if (!user) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found.');
+
+    const resetToken = jwtHelper.createToken(
+      {
+        email: user.email,
+        userId: user._id,
+        role: user.role,
+        isResetToken: true, // ! important: because anyone can use accessToken 🙃
+      },
+      config.jwt.jwt_secret as string,
+      '15m',
+    );
+
+    await sendEmail(
+      user.email,
+      'Password Reset Request',
+      makeResetBody(resetToken),
+    );
+  },
+
+  resetPassword: async ({ user, body, authData }: Request) => {
+    if (!authData!.isResetToken)
+      throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid token.');
+
+    if (!user) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid user.');
+
+    user.password = body.password;
+
+    await user.save();
+
+    return await AuthService.login(user.email, body.password);
   },
 };

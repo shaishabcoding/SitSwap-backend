@@ -17,12 +17,12 @@ const auth = (...roles: ('user' | 'admin')[]) =>
       const token = tokenWithBearer.split(' ')[1];
 
       //verify token
-      const { userId } = jwtHelper.verifyToken(
+      const authData = jwtHelper.verifyToken(
         token,
         config.jwt.jwt_secret as Secret,
       );
 
-      const user = await User.findById(userId).select('+password');
+      const user = await User.findById(authData.userId).select('+password');
 
       //guard user
       if (!user || (roles.length && !roles.includes(user.role)))
@@ -33,6 +33,7 @@ const auth = (...roles: ('user' | 'admin')[]) =>
 
       //set user to header
       req.user = user;
+      req.authData = authData;
 
       next();
     }

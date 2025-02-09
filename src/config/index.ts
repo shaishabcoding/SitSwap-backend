@@ -41,6 +41,7 @@ export default {
     password: process.env.ADMIN_PASSWORD,
   },
   url: {
+    reset_pass_ui_link: process.env.LOCAL_BASE_URL,
     local: process.env.LOCAL_BASE_URL,
     paypal_base_url: process.env.PAYPAL_BASE_URL,
   },

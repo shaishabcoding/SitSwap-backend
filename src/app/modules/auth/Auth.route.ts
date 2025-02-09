@@ -30,4 +30,12 @@ router.patch(
 
 router.post('/refresh-token', AuthController.refreshToken);
 
+router.post('/forgot-password', limiter, AuthController.forgetPassword);
+
+router.post(
+  '/reset-password',
+  auth('admin', 'user'),
+  AuthController.resetPassword,
+);
+
 export const AuthRoutes = router;
