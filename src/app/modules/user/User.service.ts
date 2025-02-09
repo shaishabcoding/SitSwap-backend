@@ -1,3 +1,4 @@
+import deleteFile from '../../../shared/deleteFile';
 import IUser from './User.interface';
 import User from './User.model';
 
@@ -7,7 +8,11 @@ export const UserService = {
   },
 
   modify: async (user: IUser, userData: Partial<IUser>) => {
+    const imagesToDelete = user.avatar;
+
     Object.assign(user, userData);
     await user.save();
+
+    if (userData.avatar) await deleteFile(imagesToDelete); // ^ clean up old image
   },
 };
