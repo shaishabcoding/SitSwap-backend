@@ -17,4 +17,14 @@ export const UserController = {
       data: newUser,
     });
   }, imagesUploadRollback),
+
+  modify: catchAsyncWithCallback(async (req, res) => {
+    await UserService.modify(req.user!, req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Profile update successfully',
+    });
+  }, imagesUploadRollback),
 };

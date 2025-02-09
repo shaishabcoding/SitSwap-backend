@@ -19,6 +19,16 @@ router.post(
   UserController.register,
 );
 
+router.patch(
+  '/update-profile',
+  auth('user', 'admin'),
+  imageUploader((req, images) => {
+    req.body.avatar = images[0];
+  }, true),
+  purifyRequest(UserValidation.updateSchema),
+  UserController.modify,
+);
+
 router.post('/login', limiter, AuthController.login);
 
 router.patch(
