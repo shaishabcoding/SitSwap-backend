@@ -50,4 +50,10 @@ router.post(
 
 router.post('/logout', auth('user', 'admin'), AuthController.logout);
 
+router.delete(
+  '/delete-user/:userId',
+  auth('user', 'admin'),
+  UserController.delete,
+);
+
 export const AuthRoutes = router;
