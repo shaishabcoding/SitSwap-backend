@@ -25,6 +25,7 @@ export const UserController = {
       success: true,
       statusCode: StatusCodes.OK,
       message: 'Profile update successfully',
+      data: req.body,
     });
   }, imagesUploadRollback),
 };
