@@ -1,12 +1,32 @@
+/* eslint-disable no-unused-vars */
 import fs from 'fs';
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../errors/ApiError';
-import { ErrorRequestHandler } from 'express';
+import { ErrorRequestHandler, Request } from 'express';
 import deleteFile from '../../shared/deleteFile';
+import { catchAsyncWithCallback } from '../../shared/catchAsync';
 
-const imageUploader = () => {
+/**
+ * Middleware for handling image uploads using multer.
+ *
+ * @param {Function} callback - A callback function to be called after the images are uploaded.
+ * The callback receives the request object and an array of image URLs.
+ *
+ * @returns Middleware function to handle image uploads.
+ *
+ * @example
+ * // Usage in an Express route
+ * app.post('/upload', imageUploader((req, images) => {
+ *   console.log('Uploaded images:', images);
+ * }), (req, res) => {
+ *   res.send('Images uploaded successfully');
+ * });
+ *
+ * @throws {ApiError} If the file upload fails or if the uploaded file is not an image.
+ */
+const imageUploader = (callback: (req: Request, images: string[]) => void) => {
   const baseUploadDir = path.join(process.cwd(), 'uploads');
 
   if (!fs.existsSync(baseUploadDir)) {
@@ -50,9 +70,28 @@ const imageUploader = () => {
   const upload = multer({
     storage,
     fileFilter,
-  }).fields([{ name: 'images', maxCount: 5 }]); // Allow up to 5 images
+  }).fields([{ name: 'images', maxCount: 20 }]); // Allow up to 20 images
 
-  return upload;
+  return catchAsyncWithCallback((req, res, next) => {
+    upload(req, res, err => {
+      if (err)
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          err.message || 'File upload failed',
+        );
+
+      const images: string[] =
+        (req.files as { images?: any })?.images?.map(
+          (file: { filename: string }) => `/images/${file.filename}`,
+        ) || [];
+
+      if (!images.length)
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'No images uploaded');
+
+      callback(req, images);
+      next();
+    });
+  }, imagesUploadRollback);
 };
 
 /** Middleware to ensure image rollbacks if an error occurs during the request handling */

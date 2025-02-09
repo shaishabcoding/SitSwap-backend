@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './User.service';
+import { imagesUploadRollback } from '../../middlewares/imageUploader';
 
 export const UserController = {
   register: catchAsyncWithCallback(async (req, res) => {
@@ -15,5 +16,5 @@ export const UserController = {
       message: 'User register successfully.',
       data: newUser,
     });
-  }),
+  }, imagesUploadRollback),
 };

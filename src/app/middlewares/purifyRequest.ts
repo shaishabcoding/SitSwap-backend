@@ -13,7 +13,13 @@ import catchAsync from '../../shared/catchAsync';
  */
 const purifyRequest = (schema: AnyZodObject) =>
   catchAsync(async (req, _, next) => {
-    req.body = await schema.parseAsync(req.body);
+    const parseData = await schema.parseAsync({
+      body: req.body,
+      cookies: req.cookies,
+    });
+
+    req.body = parseData.body;
+
     next();
   });
 
