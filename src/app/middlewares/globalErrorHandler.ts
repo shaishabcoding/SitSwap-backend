@@ -52,6 +52,17 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
           },
         ]
       : [];
+  } else if (error.code === 11000) {
+    // Handle MongoDB Duplicate Key Error (E11000)
+    statusCode = StatusCodes.CONFLICT;
+    const duplicateField = Object.keys(error.keyValue)[0]; // Get the field that caused the duplication
+    message = `Duplicate value for ${duplicateField} field`;
+    errorMessages = [
+      {
+        path: duplicateField,
+        message: `The ${duplicateField} "${error.keyValue[duplicateField]}" is already in use. Please use a different one.`,
+      },
+    ];
   } else if (error instanceof ApiError) {
     statusCode = error.statusCode;
     message = error.message;
