@@ -8,7 +8,7 @@ import User from '../modules/user/User.model';
 import catchAsync from '../../shared/catchAsync';
 
 const auth = (...roles: ('user' | 'admin')[]) =>
-  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
     const tokenWithBearer = req.headers.authorization;
     if (!tokenWithBearer)
       throw new ApiError(StatusCodes.UNAUTHORIZED, 'You are not authorized');
@@ -22,7 +22,7 @@ const auth = (...roles: ('user' | 'admin')[]) =>
         config.jwt.jwt_secret as Secret,
       );
 
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).select('+password');
 
       //guard user
       if (!user || (roles.length && !roles.includes(user.role)))
