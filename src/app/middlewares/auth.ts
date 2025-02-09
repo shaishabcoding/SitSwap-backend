@@ -24,8 +24,10 @@ const auth = (...roles: ('user' | 'admin')[]) =>
 
       const user = await User.findById(authData.userId).select('+password');
 
+      if (!user) throw new ApiError(StatusCodes.UNAUTHORIZED, 'User not found');
+
       //guard user
-      if (!user || (roles.length && !roles.includes(user.role)))
+      if (roles.length && !roles.includes(user.role))
         throw new ApiError(
           StatusCodes.FORBIDDEN,
           "You don't have permission to access this api",
