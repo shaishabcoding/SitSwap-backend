@@ -1,21 +1,16 @@
 import colors from 'colors';
-import config from '../config';
 import { logger } from '../shared/logger';
-
-const adminData = {
-  // name: 'bdCalling',
-  // email: config.admin.email,
-  // phone: '124',
-  // password: config.admin.password,
-  // avatar: 'https://picsum.photos/200',
-};
+import User from '../app/modules/user/User.model';
+import { firstAdminData } from '../app/modules/user/User.constant';
 
 const seedAdmin = async () => {
-  const adminExist = !!(await Admin.findOne());
+  const adminExist = !!(await User.findOne({
+    role: 'admin',
+  }));
 
   if (!adminExist) {
     logger.info(colors.yellow('📝 first admin is creating...'));
-    await Admin.create(adminData);
+    await User.create(firstAdminData);
     logger.info(colors.green('✔ admin created successfully!'));
   }
 };
