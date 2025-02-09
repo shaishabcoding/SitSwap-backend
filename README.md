@@ -1,3 +1,3 @@
 # console-locker
 
-[ER diagram](https://drive.google.com/file/d/1ZKig8v8PH74YZ21tTqRh6SivLZ4TTAvG/view?usp=sharing)
+[ER diagram](https://drive.google.com/file/d/1bFsgh_z8wHKz7BdDg8CsoB1AOHs-uGrA/view?usp=sharing)
