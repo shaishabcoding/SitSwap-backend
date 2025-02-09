@@ -11,7 +11,7 @@ import { makeResetBody } from './Auth.constant';
 import { Request } from 'express';
 
 export const AuthService = {
-  login: async (email: string, password: string) => {
+  async login(email: string, password: string) {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await bcrypt.compare(password, user.password)))
@@ -49,10 +49,13 @@ export const AuthService = {
 
     user.password = newPassword;
     await user.save();
+
+    // ^ also login user if they changed password
+    return await this.login(user.email, newPassword);
   },
 
   // ^ This will make a accessToken if refreshToken is valid.
-  refreshToken: async (token: string) => {
+  async refreshToken(token: string) {
     if (!token) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Access Denied!');
 
     const { userId } = jwtHelper.verifyToken(
@@ -73,7 +76,7 @@ export const AuthService = {
     return { accessToken };
   },
 
-  forgetPassword: async (email: string) => {
+  async forgetPassword(email: string) {
     const user = await User.findOne({
       email,
     });
@@ -98,7 +101,7 @@ export const AuthService = {
     );
   },
 
-  resetPassword: async ({ user, body, authData }: Request) => {
+  async resetPassword({ user, body, authData }: Request) {
     if (!authData!.isResetToken)
       throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid token.');
 
@@ -108,6 +111,7 @@ export const AuthService = {
 
     await user.save();
 
-    return await AuthService.login(user.email, body.password);
+    // ^ also login user if they reset password
+    return await this.login(user.email, body.password);
   },
 };

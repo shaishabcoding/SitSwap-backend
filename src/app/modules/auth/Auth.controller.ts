@@ -28,16 +28,24 @@ export const AuthController = {
   }),
 
   changePassword: catchAsync(async (req, res) => {
-    await AuthService.changePassword(
+    const { token } = await AuthService.changePassword(
       req.user!,
       req.body.oldPassword,
       req.body.newPassword,
     );
 
+    res.cookie('refreshToken', token.refreshToken, {
+      secure: config.node_env !== 'development',
+      httpOnly: true,
+    });
+
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
       message: 'Password changed successfully.',
+      data: {
+        accessToken: token.accessToken,
+      },
     });
   }),
 
