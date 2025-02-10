@@ -1,13 +1,15 @@
 class ServerError extends Error {
-  statusCode: number;
-  constructor(statusCode: number, message: string | undefined, stack = '') {
+  constructor(
+    // eslint-disable-next-line no-unused-vars
+    public readonly statusCode: number,
+    message = 'An error occurred',
+    stack?: string,
+  ) {
     super(message);
-    this.statusCode = statusCode;
-    if (stack) {
-      this.stack = stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    this.name = 'ServerError';
+
+    if (stack) this.stack = stack;
+    else Error.captureStackTrace(this, this.constructor);
   }
 }
 
