@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import ApiError from '../../../errors/ApiError';
+import ServerError from '../../../errors/ServerError';
 import deleteFile from '../../../shared/deleteFile';
 import IUser from './User.interface';
 import User from './User.model';
@@ -22,7 +22,7 @@ export const UserService = {
     const deletedUser = await User.findByIdAndDelete(userId);
 
     if (!deletedUser)
-      throw new ApiError(StatusCodes.NOT_FOUND, 'User not found.');
+      throw new ServerError(StatusCodes.NOT_FOUND, 'User not found.');
 
     await deleteFile(deletedUser.avatar); // ^ clean up image
   },

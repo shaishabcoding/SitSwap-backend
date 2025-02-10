@@ -3,7 +3,7 @@ import catchAsync, { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './User.service';
 import { imagesUploadRollback } from '../../middlewares/imageUploader';
-import ApiError from '../../../errors/ApiError';
+import ServerError from '../../../errors/ServerError';
 import config from '../../../config';
 
 export const UserController = {
@@ -36,7 +36,10 @@ export const UserController = {
     const authUser = req.user;
 
     if (authUser!.role !== 'admin' && authUser!._id!.toString() !== userId)
-      throw new ApiError(StatusCodes.FORBIDDEN, "You can't delete this user");
+      throw new ServerError(
+        StatusCodes.FORBIDDEN,
+        "You can't delete this user",
+      );
 
     if (authUser!._id!.toString() === userId)
       res.clearCookie('refreshToken', {

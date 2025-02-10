@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import ApiError from '../../../errors/ApiError';
+import ServerError from '../../../errors/ServerError';
 import User from '../user/User.model';
 import bcrypt from 'bcrypt';
 import { jwtHelper } from '../../../helpers/jwtHelper';
@@ -15,7 +15,10 @@ export const AuthService = {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await bcrypt.compare(password, user.password)))
-      throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid email or password');
+      throw new ServerError(
+        StatusCodes.UNAUTHORIZED,
+        'Invalid email or password',
+      );
 
     const accessToken = jwtHelper.createToken(
       { email: user.email, userId: user._id, role: user.role },
@@ -45,7 +48,7 @@ export const AuthService = {
 
   async changePassword(user: IUser, oldPassword: string, newPassword: string) {
     if (!(await bcrypt.compare(oldPassword, user.password)))
-      throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid password');
+      throw new ServerError(StatusCodes.UNAUTHORIZED, 'Invalid password');
 
     user.password = newPassword;
     await user.save();
@@ -56,7 +59,8 @@ export const AuthService = {
 
   // ^ This will make a accessToken if refreshToken is valid.
   async refreshToken(token: string) {
-    if (!token) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Access Denied!');
+    if (!token)
+      throw new ServerError(StatusCodes.UNAUTHORIZED, 'Access Denied!');
 
     const { userId } = jwtHelper.verifyToken(
       token,
@@ -65,7 +69,7 @@ export const AuthService = {
 
     const user = await User.findById(userId);
 
-    if (!user) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found!');
+    if (!user) throw new ServerError(StatusCodes.NOT_FOUND, 'User not found!');
 
     const accessToken = jwtHelper.createToken(
       { email: user.email, userId: user._id, role: user.role },
@@ -81,7 +85,7 @@ export const AuthService = {
       email,
     });
 
-    if (!user) throw new ApiError(StatusCodes.NOT_FOUND, 'User not found.');
+    if (!user) throw new ServerError(StatusCodes.NOT_FOUND, 'User not found.');
 
     const resetToken = jwtHelper.createToken(
       {
@@ -103,9 +107,9 @@ export const AuthService = {
 
   async resetPassword({ user, body, authData }: Request) {
     if (!authData!.isResetToken)
-      throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid token.');
+      throw new ServerError(StatusCodes.UNAUTHORIZED, 'Invalid token.');
 
-    if (!user) throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid user.');
+    if (!user) throw new ServerError(StatusCodes.UNAUTHORIZED, 'Invalid user.');
 
     user.password = body.password;
 

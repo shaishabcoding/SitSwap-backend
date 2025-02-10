@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
-import ApiError from '../../errors/ApiError';
+import ServerError from '../../errors/ServerError';
 import { ErrorRequestHandler, Request } from 'express';
 import deleteFile from '../../shared/deleteFile';
 import { catchAsyncWithCallback } from '../../shared/catchAsync';
@@ -24,7 +24,7 @@ import { catchAsyncWithCallback } from '../../shared/catchAsync';
  *   res.send('Images uploaded successfully');
  * });
  *
- * @throws {ApiError} If the file upload fails or if the uploaded file is not an image.
+ * @throws {ServerError} If the file upload fails or if the uploaded file is not an image.
  */
 const imageUploader = (
   callback: (req: Request, images: string[]) => void,
@@ -66,7 +66,12 @@ const imageUploader = (
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
-      cb(new ApiError(StatusCodes.BAD_REQUEST, 'Only image files are allowed'));
+      cb(
+        new ServerError(
+          StatusCodes.BAD_REQUEST,
+          'Only image files are allowed',
+        ),
+      );
     }
   };
 
@@ -78,7 +83,7 @@ const imageUploader = (
   return catchAsyncWithCallback((req, res, next) => {
     upload(req, res, err => {
       if (err)
-        throw new ApiError(
+        throw new ServerError(
           StatusCodes.BAD_REQUEST,
           err.message || 'File upload failed',
         );
@@ -90,7 +95,7 @@ const imageUploader = (
 
       if (!images.length) {
         if (!isOptional)
-          throw new ApiError(StatusCodes.BAD_REQUEST, 'No images uploaded');
+          throw new ServerError(StatusCodes.BAD_REQUEST, 'No images uploaded');
 
         return next();
       }

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import ApiError from '../errors/ApiError';
+import ServerError from '../errors/ServerError';
 import { StatusCodes } from 'http-status-codes';
 import config from '../config';
 
@@ -34,7 +34,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
               padding: 0;
               font-family: Arial, sans-serif;
             }
-    
+
             /* Container styles */
             .container {
               max-width: 600px;
@@ -45,7 +45,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
               background-color: #fff;
               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
-    
+
             /* Header styles */
             .header {
               background-color: #caccd1; /* New blue background */
@@ -57,7 +57,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
             .header h1 {
               margin: 0;
             }
-    
+
             /* Content styles */
             .content {
               padding: 20px;
@@ -66,7 +66,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
               line-height: 1.6;
               color: #333;
             }
-    
+
             /* Footer styles */
             .footer {
               background-color: #caccd1; /* New green background */
@@ -76,7 +76,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
               color: #000000;
               font-size: 12px;
             }
-    
+
             /* Button styles */
             .btn {
               display: inline-block;
@@ -88,7 +88,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
               border-radius: 5px;
               font-weight: bold;
             }
-    
+
             /* Responsive styles */
             @media (max-width: 600px) {
               .container {
@@ -119,7 +119,7 @@ export async function sendEmail(email: string, subject: string, text: string) {
 
     return info;
   } catch (error) {
-    throw new ApiError(
+    throw new ServerError(
       StatusCodes.INTERNAL_SERVER_ERROR,
       'Error sending email',
     );
