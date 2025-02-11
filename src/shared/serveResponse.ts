@@ -35,7 +35,7 @@ const serveResponse = <T>(
     statusCode = StatusCodes.OK,
     success = true,
     message = 'Success',
-    meta = {},
+    meta,
     data,
   }: Partial<ApiResponse<T>> = {},
 ): void => {
