@@ -1,4 +1,4 @@
-import { catchAsyncWithCallback } from '../../../shared/catchAsync';
+import catchAsync, { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import { imagesUploadRollback } from '../../middlewares/imageUploader';
 import serveResponse from '../../../shared/serveResponse';
 import { ProductService } from './Product.service';
@@ -29,4 +29,12 @@ export const ProductController = {
       data: updatedProduct,
     });
   }, imagesUploadRollback),
+
+  delete: catchAsync(async (req, res) => {
+    await ProductService.delete(req.params.productId);
+
+    serveResponse(res, {
+      message: 'Product deleted successfully.',
+    });
+  }),
 };

@@ -29,4 +29,16 @@ export const ProductService = {
 
     return product;
   },
+
+  async delete(productId: string) {
+    const product = await Product.findByIdAndDelete(productId);
+
+    if (!product)
+      throw new ServerError(StatusCodes.NOT_FOUND, 'Product not found.');
+
+    // ? delete old images asynchronously
+    await Promise.all(
+      product.images.map(async (image: string) => await deleteFile(image)),
+    );
+  },
 };

@@ -24,6 +24,8 @@ adminRoutes.patch(
   ProductController.update,
 );
 
+adminRoutes.delete('/:productId/delete', ProductController.delete);
+
 const userRoutes = Router();
 
 export const ProductRoutes = {
