@@ -7,6 +7,7 @@ import {
   OrdersController,
   PaymentsController,
 } from '@paypal/paypal-server-sdk';
+import axios from 'axios';
 
 export const braintree = new bt.BraintreeGateway({
   environment:
@@ -35,7 +36,24 @@ export const paypalClient = new Client({
   },
 });
 
+async function getPaypalAccessToken() {
+  const response = await axios.post(
+    `${config.url.paypal_base_url}/v1/oauth2/token`,
+    'grant_type=client_credentials',
+    {
+      auth: {
+        username: config.payment.paypal.client as string,
+        password: config.payment.paypal.secret as string,
+      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    },
+  );
+
+  return response.data.access_token;
+}
+
 export const paypal = {
   order: new OrdersController(paypalClient),
   payment: new PaymentsController(paypalClient),
+  token: getPaypalAccessToken,
 };

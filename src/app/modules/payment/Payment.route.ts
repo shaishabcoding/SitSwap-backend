@@ -19,6 +19,8 @@ const router = Router();
 const paypalRouter = Router();
 
 paypalRouter.post('/create-order', PaymentController.paypal.createOrder);
+paypalRouter.post('/capture-order', PaymentController.paypal.captureOrder);
+paypalRouter.post('/subscribe-order', PaymentController.paypal.subscribeOrder);
 
 // * paypal payment -> end
 
