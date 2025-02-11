@@ -28,6 +28,11 @@ export default {
       client: process.env.PAYMENT_STRIPE_CLIENT,
       secret: process.env.PAYMENT_STRIPE_SECRET,
     },
+    braintree: {
+      merchantId: process.env.BRAINTREE_MERCHANTID,
+      privateKey: process.env.BRAINTREE_PRIVATEKEY,
+      publicKey: process.env.BRAINTREE_PUBLICKEY,
+    },
   },
   email: {
     from: process.env.EMAIL_FROM,
