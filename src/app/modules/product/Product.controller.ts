@@ -37,4 +37,14 @@ export const ProductController = {
       message: 'Product deleted successfully.',
     });
   }),
+
+  list: catchAsync(async (req, res) => {
+    const { products, meta } = await ProductService.list(req.query);
+
+    serveResponse(res, {
+      message: 'Product deleted successfully.',
+      meta,
+      data: products,
+    });
+  }),
 };

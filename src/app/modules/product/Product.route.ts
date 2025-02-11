@@ -28,6 +28,8 @@ adminRoutes.delete('/:productId/delete', ProductController.delete);
 
 const userRoutes = Router();
 
+userRoutes.get('/', ProductController.list);
+
 export const ProductRoutes = {
   adminRoutes,
   userRoutes,

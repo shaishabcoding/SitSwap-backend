@@ -41,4 +41,13 @@ export const ProductService = {
       product.images.map(async (image: string) => await deleteFile(image)),
     );
   },
+
+  async list(query: Record<string, any>) {
+    const products = await Product.find(query);
+
+    return {
+      products,
+      meta: {},
+    };
+  },
 };
