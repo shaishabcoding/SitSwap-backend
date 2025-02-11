@@ -17,4 +17,20 @@ export const PaymentController = {
     }),
   },
   // * brain tree payment -> end
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // * paypal payment -> start
+  paypal: {
+    createOrder: catchAsync(async (req, res) => {
+      const { data, statusCode } = await PaymentService.paypal.createOrder(
+        req.body,
+      );
+
+      serveResponse(res, {
+        message: 'Order created successfully.',
+        data,
+        statusCode,
+      });
+    }),
+  },
+  // * paypal payment -> end
 };

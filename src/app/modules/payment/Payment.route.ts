@@ -1,18 +1,29 @@
 import { Router } from 'express';
 import { PaymentController } from './Payment.controller';
-import auth from '../../middlewares/auth';
+// import auth from '../../middlewares/auth'; // TODO
 
 const router = Router();
 
-router.use(auth('user', 'admin')); // ? verify s/he is a user
+// router.use(auth('user', 'admin')); // ? verify s/he is a user // TODO
 
-// * brain tree payment -> start
-const brainTreeRoutes = Router();
+// // * brain tree payment -> start
+// const brainTreeRoutes = Router();
 
-brainTreeRoutes.get('/client-token', PaymentController.braintree.clientToken);
+// brainTreeRoutes.get('/client-token', PaymentController.braintree.clientToken);
 
-// * brain tree payment -> end
+// // * brain tree payment -> end
 
-router.use('/brain-tree', brainTreeRoutes);
+// router.use('/brain-tree', brainTreeRoutes);
+
+// * paypal payment -> start
+const paypalRouter = Router();
+
+paypalRouter.post('/create-order', PaymentController.paypal.createOrder);
+
+// * paypal payment -> end
+
+//* marge routes -> start
+router.use('/paypal', paypalRouter);
+//* marge routes -> end
 
 export const PaymentRoutes = router;
