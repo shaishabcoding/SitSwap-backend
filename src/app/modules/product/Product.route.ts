@@ -15,6 +15,15 @@ adminRoutes.post(
   ProductController.create,
 );
 
+adminRoutes.patch(
+  '/:productId/edit',
+  imageUploader((req, images) => {
+    req.body.images = images;
+  }, true),
+  purifyRequest(ProductValidation.update),
+  ProductController.update,
+);
+
 const userRoutes = Router();
 
 export const ProductRoutes = {

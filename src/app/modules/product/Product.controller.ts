@@ -17,4 +17,16 @@ export const ProductController = {
       data: newProduct,
     });
   }, imagesUploadRollback),
+
+  update: catchAsyncWithCallback(async (req, res) => {
+    const updatedProduct = await ProductService.update(
+      req.params.productId,
+      req.body,
+    );
+
+    serveResponse(res, {
+      message: 'Product updated successfully.',
+      data: updatedProduct,
+    });
+  }, imagesUploadRollback),
 };
