@@ -26,6 +26,11 @@ const productSchema = new Schema<IProduct>(
     specifications: { type: [String], required: true },
     isAvailable: { type: Boolean, required: true },
     isRentable: { type: Boolean, required: true },
+    user: {
+      type: Schema.ObjectId,
+      required: true,
+      ref: "User",
+    }
   },
   {
     timestamps: true,

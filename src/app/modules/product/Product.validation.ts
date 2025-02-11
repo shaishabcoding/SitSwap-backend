@@ -9,9 +9,9 @@ export const ProductValidation = {
       color: z.string().min(1, 'Color is required'),
       size: z.string().min(1, 'Size is required'),
       material: z.string().min(1, 'Material is required'),
-      buy_price: z.number().positive('Buy price must be a positive number'),
-      rent_price: z.number().positive('Rent price must be a positive number'),
-      stock: z.number().int().min(0, 'Stock must be a non-negative integer'),
+      buy_price: z.number().positive('Buy price must be a positive number').optional(),
+      rent_price: z.number().positive('Rent price must be a positive number').optional(),
+      stock: z.number().int().min(1, 'Stock must be a non-negative integer'),
       images: z
         .array(z.string().min(1, 'Image path is required'))
         .min(1, 'At least one image is required'),

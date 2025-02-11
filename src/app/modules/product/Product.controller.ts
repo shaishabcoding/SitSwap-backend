@@ -5,7 +5,12 @@ import { ProductService } from './Product.service';
 
 export const ProductController = {
   create: catchAsyncWithCallback(async (req, res) => {
-    const newProduct = await ProductService.create(req.body);
+    const productData = {
+      ...req.body,
+      user: req.user!._id,
+    };
+
+    const newProduct = await ProductService.create(productData);
 
     serveResponse(res, {
       message: 'Product created successfully.',

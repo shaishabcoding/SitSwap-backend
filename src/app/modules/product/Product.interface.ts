@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 interface IProduct extends Document {
   name: string;
@@ -16,6 +16,7 @@ interface IProduct extends Document {
   specifications: string[];
   isAvailable: boolean;
   isRentable: boolean;
+  user: Types.ObjectId;
 }
 
 export default IProduct;
