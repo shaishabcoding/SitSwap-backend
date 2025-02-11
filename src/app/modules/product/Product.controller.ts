@@ -7,7 +7,7 @@ export const ProductController = {
   create: catchAsyncWithCallback(async (req, res) => {
     const productData = {
       ...req.body,
-      user: req.user!._id,
+      user: req.user!._id, // * track the user
     };
 
     const newProduct = await ProductService.create(productData);
