@@ -11,7 +11,12 @@ const auth = (...roles: ('user' | 'admin')[]) =>
   catchAsync(async (req: Request, _res: Response, next: NextFunction) => {
     const tokenWithBearer = req.headers.authorization;
     if (!tokenWithBearer)
-      throw new ServerError(StatusCodes.UNAUTHORIZED, 'You are not authorized');
+      if (!roles.length) return next();
+      else
+        throw new ServerError(
+          StatusCodes.UNAUTHORIZED,
+          'You are not authorized',
+        );
 
     if (tokenWithBearer && tokenWithBearer.startsWith('Bearer')) {
       const token = tokenWithBearer.split(' ')[1];
