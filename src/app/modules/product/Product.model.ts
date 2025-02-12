@@ -37,9 +37,9 @@ const productSchema = new Schema<IProduct>(
       default: 5,
       validate: {
         validator: function (value) {
-          return value >= 0.5 && value <= 5 && value % 0.5 === 0;
+          return value >= 0 && value <= 5 && value % 0.5 === 0;
         },
-        message: 'Rating must be between 0.5 and 5, in increments of 0.5',
+        message: 'Rating must be between 0 and 5, in increments of 0.5',
       },
     },
   },
