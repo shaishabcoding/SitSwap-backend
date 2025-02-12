@@ -29,8 +29,14 @@ const productSchema = new Schema<IProduct>(
     user: {
       type: Schema.ObjectId,
       required: true,
-      ref: "User",
-    }
+      ref: 'User',
+    },
+    rating: {
+      type: Number,
+      enum: [1, 2, 3, 4, 5],
+      default: 5,
+      required: true,
+    },
   },
   {
     timestamps: true,

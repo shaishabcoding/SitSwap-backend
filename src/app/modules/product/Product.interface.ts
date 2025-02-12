@@ -17,6 +17,7 @@ interface IProduct extends Document {
   isAvailable: boolean;
   isRentable: boolean;
   user: Types.ObjectId;
+  rating: number;
 }
 
 export default IProduct;
