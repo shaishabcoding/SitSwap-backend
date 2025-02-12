@@ -20,4 +20,8 @@ export const ProductReviewService = {
 
     return review;
   },
+
+  async delete({ user, product }: Partial<IProductReview>) {
+    await ProductReview.deleteOne({ user, product });
+  },
 };

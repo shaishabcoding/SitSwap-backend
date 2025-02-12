@@ -19,4 +19,17 @@ export const ProductReviewController = {
       message: 'Review modify successfully.',
     });
   }),
+
+  delete: catchAsync(async (req, res) => {
+    const filter = {
+      user: req.user!._id as Types.ObjectId,
+      product: new Types.ObjectId(req.params.productId),
+    };
+
+    await ProductReviewService.delete(filter as Partial<IProductReview>);
+
+    serveResponse(res, {
+      message: 'Review deleted successfully.',
+    });
+  }),
 };

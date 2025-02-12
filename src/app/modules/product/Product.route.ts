@@ -31,6 +31,11 @@ adminRoutes.delete('/:productId/delete', ProductController.delete);
 const userRoutes = Router();
 
 userRoutes.patch('/:productId/review', auth(), ProductReviewController.modify);
+userRoutes.delete(
+  '/:productId/review/delete',
+  auth(),
+  ProductReviewController.delete,
+);
 
 userRoutes.get('/', ProductController.list);
 userRoutes.get('/retrieve-by-ids', ProductController.retrieveByIds);
