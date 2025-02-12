@@ -4,6 +4,7 @@ import imageUploader from '../../middlewares/imageUploader';
 import purifyRequest from '../../middlewares/purifyRequest';
 import { ProductValidation } from './Product.validation';
 import { ProductReviewController } from '../product-review/ProductReview.controller';
+import auth from '../../middlewares/auth';
 
 const adminRoutes = Router();
 
@@ -29,7 +30,11 @@ adminRoutes.delete('/:productId/delete', ProductController.delete);
 
 const userRoutes = Router();
 
-userRoutes.patch('/:productId/review', ProductReviewController.modify);
+userRoutes.patch(
+  '/:productId/review',
+  auth('admin', 'user'),
+  ProductReviewController.modify,
+);
 
 userRoutes.get('/', ProductController.list);
 userRoutes.get('/retrieve-by-ids', ProductController.retrieveByIds);
