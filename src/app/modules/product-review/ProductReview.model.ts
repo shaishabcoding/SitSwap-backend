@@ -15,8 +15,13 @@ const productReviewSchema = new Schema<IProductReview>(
     },
     rating: {
       type: Number,
-      enum: [1, 2, 3, 4, 5],
       required: true,
+      validate: {
+        validator: function (value) {
+          return value >= 0.5 && value <= 5 && value % 0.5 === 0;
+        },
+        message: 'Rating must be between 0.5 and 5, in increments of 0.5',
+      },
     },
     review: {
       type: String,
