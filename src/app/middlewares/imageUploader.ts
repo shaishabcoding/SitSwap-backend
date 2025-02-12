@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import fs from 'fs';
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
@@ -7,6 +6,7 @@ import ServerError from '../../errors/ServerError';
 import { ErrorRequestHandler, Request } from 'express';
 import deleteFile from '../../shared/deleteFile';
 import { catchAsyncWithCallback } from '../../shared/catchAsync';
+import { createDir } from '../../util/createDir';
 
 /**
  * Middleware for handling image uploads using multer.
@@ -30,17 +30,12 @@ const imageUploader = (
   callback: (req: Request, images: string[]) => void,
   isOptional: boolean = false,
 ) => {
-  const baseUploadDir = path.join(process.cwd(), 'uploads');
+  const baseUploadDir =
+    process.env.HOST === 'vercel'
+      ? path.join('/tmp', 'uploads')
+      : path.join(process.cwd(), 'uploads');
 
-  if (!fs.existsSync(baseUploadDir)) {
-    fs.mkdirSync(baseUploadDir);
-  }
-
-  const createDir = (dirPath: string) => {
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath);
-    }
-  };
+  createDir(baseUploadDir);
 
   const storage = multer.diskStorage({
     destination: (_req, _file, cb) => {
