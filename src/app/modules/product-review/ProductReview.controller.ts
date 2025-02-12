@@ -13,10 +13,13 @@ export const ProductReviewController = {
 
     Object.assign(reviewData, req.body);
 
-    await ProductReviewService.modify(reviewData as IProductReview);
+    const review = await ProductReviewService.modify(
+      reviewData as IProductReview,
+    );
 
     serveResponse(res, {
       message: 'Review modify successfully.',
+      data: review,
     });
   }),
 
