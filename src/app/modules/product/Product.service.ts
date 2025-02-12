@@ -50,4 +50,8 @@ export const ProductService = {
       meta: {},
     };
   },
+
+  async retrieveByIds(ids: string[]) {
+    return await Product.find({ _id: { $in: ids } });
+  },
 };

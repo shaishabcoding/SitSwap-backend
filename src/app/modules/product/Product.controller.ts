@@ -2,6 +2,9 @@ import catchAsync, { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import { imagesUploadRollback } from '../../middlewares/imageUploader';
 import serveResponse from '../../../shared/serveResponse';
 import { ProductService } from './Product.service';
+import ServerError from '../../../errors/ServerError';
+import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
 
 export const ProductController = {
   create: catchAsyncWithCallback(async (req, res) => {
@@ -44,6 +47,34 @@ export const ProductController = {
     serveResponse(res, {
       message: 'Product deleted successfully.',
       meta,
+      data: products,
+    });
+  }),
+
+  retrieveByIds: catchAsync(async (req, res) => {
+    const { ids } = req.query;
+
+    if (!ids || typeof ids !== 'string')
+      throw new ServerError(
+        StatusCodes.NOT_FOUND,
+        'Invalid or missing product IDs. Provide a comma-separated string.',
+      );
+
+    const productIds = ids
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => mongoose.isValidObjectId(id));
+
+    if (!productIds.length)
+      throw new ServerError(
+        StatusCodes.NOT_FOUND,
+        'No valid product IDs provided.',
+      );
+
+    const products = await ProductService.retrieveByIds(productIds);
+
+    serveResponse(res, {
+      message: 'Products retrieved successfully.',
       data: products,
     });
   }),
