@@ -11,43 +11,43 @@ export const ProductValidation = {
       material: z.string().min(1, 'Material is required'),
       buy_price: z
         .string()
-        .transform(val => parseFloat(val)) // Convert string to number
+        .transform(val => parseFloat(val))
         .refine(val => !isNaN(val), {
           message: 'Buy price must be a valid number',
         })
-        .pipe(z.number().positive('Buy price must be a positive number')) // Apply positive validation after conversion to number
+        .pipe(z.number().positive('Buy price must be a positive number'))
         .optional(),
       rent_price: z
         .string()
-        .transform(val => parseFloat(val)) // Convert string to number
+        .transform(val => parseFloat(val))
         .refine(val => !isNaN(val), {
           message: 'Rent price must be a valid number',
         })
-        .pipe(z.number().positive('Rent price must be a positive number')) // Apply positive validation after conversion to number
+        .pipe(z.number().positive('Rent price must be a positive number'))
         .optional(),
       stock: z
         .string()
-        .transform(val => parseInt(val)) // Convert string to integer
+        .transform(val => parseInt(val))
         .refine(val => !isNaN(val), {
           message: 'Stock must be a valid integer',
         })
         .pipe(z.number().int('Stock must be a non-negative integer'))
         .refine(val => val > 0, {
           message: 'Stock must be greater than 0',
-        }), // Ensure stock is an integer
+        }),
       images: z
         .array(z.string().min(1, 'Image path is required'))
         .min(1, 'At least one image is required'),
       description: z.string().min(1, 'Description is required'),
       dimension: z
         .string()
-        .transform(val => JSON.parse(val)) // Parse string to object
+        .transform(val => JSON.parse(val))
         .refine(val => typeof val === 'object' && Object.keys(val).length > 0, {
           message: 'Dimension must be a valid object',
         }),
       specifications: z
         .string()
-        .transform(val => JSON.parse(val)) // Parse string to array
+        .transform(val => JSON.parse(val))
         .refine(val => Array.isArray(val) && val.length > 0, {
           message: 'Specifications must be a valid array',
         }),
@@ -56,13 +56,13 @@ export const ProductValidation = {
         .refine(val => val === 'true' || val === 'false', {
           message: 'isAvailable must be "true" or "false"',
         })
-        .transform(val => val === 'true'), // Converts "true" to true, "false" to false
+        .transform(val => val === 'true'),
       isRentable: z
         .string()
         .refine(val => val === 'true' || val === 'false', {
           message: 'isRentable must be "true" or "false"',
         })
-        .transform(val => val === 'true'), // Converts "true" to true, "false" to false
+        .transform(val => val === 'true'),
     }),
   }),
 
@@ -76,30 +76,30 @@ export const ProductValidation = {
       material: z.string().min(1, 'Material is required').optional(),
       buy_price: z
         .string()
-        .transform(val => parseFloat(val)) // Convert string to number
+        .transform(val => parseFloat(val))
         .refine(val => !isNaN(val), {
           message: 'Buy price must be a valid number',
         })
-        .pipe(z.number().positive('Buy price must be a positive number')) // Apply positive validation after conversion to number
+        .pipe(z.number().positive('Buy price must be a positive number'))
         .optional(),
       rent_price: z
         .string()
-        .transform(val => parseFloat(val)) // Convert string to number
+        .transform(val => parseFloat(val))
         .refine(val => !isNaN(val), {
           message: 'Rent price must be a valid number',
         })
-        .pipe(z.number().positive('Rent price must be a positive number')) // Apply positive validation after conversion to number
+        .pipe(z.number().positive('Rent price must be a positive number'))
         .optional(),
       stock: z
         .string()
-        .transform(val => parseInt(val)) // Convert string to integer
+        .transform(val => parseInt(val))
         .refine(val => !isNaN(val), {
           message: 'Stock must be a valid integer',
         })
         .pipe(z.number().int('Stock must be a non-negative integer'))
         .refine(val => val > 0, {
           message: 'Stock must be greater than 0',
-        }) // Ensure stock is an integer
+        })
         .optional(),
       images: z
         .array(z.string().min(1, 'Image path is required'))
@@ -108,14 +108,14 @@ export const ProductValidation = {
       description: z.string().min(1, 'Description is required').optional(),
       dimension: z
         .string()
-        .transform(val => JSON.parse(val)) // Parse string to object
+        .transform(val => JSON.parse(val))
         .refine(val => typeof val === 'object' && Object.keys(val).length > 0, {
           message: 'Dimension must be a valid object',
         })
         .optional(),
       specifications: z
         .string()
-        .transform(val => JSON.parse(val)) // Parse string to array
+        .transform(val => JSON.parse(val))
         .refine(val => Array.isArray(val) && val.length > 0, {
           message: 'Specifications must be a valid array',
         })
@@ -125,14 +125,14 @@ export const ProductValidation = {
         .refine(val => val === 'true' || val === 'false', {
           message: 'isAvailable must be "true" or "false"',
         })
-        .transform(val => val === 'true') // Converts "true" to true, "false" to false
+        .transform(val => val === 'true')
         .optional(),
       isRentable: z
         .string()
         .refine(val => val === 'true' || val === 'false', {
           message: 'isRentable must be "true" or "false"',
         })
-        .transform(val => val === 'true') // Converts "true" to true, "false" to false
+        .transform(val => val === 'true')
         .optional(),
     }),
   }),
