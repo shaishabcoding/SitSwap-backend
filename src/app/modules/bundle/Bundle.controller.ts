@@ -1,18 +1,19 @@
-import catchAsync from '../../../shared/catchAsync';
+import catchAsync, { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import serveResponse from '../../../shared/serveResponse';
+import { imagesUploadRollback } from '../../middlewares/imageUploader';
 import { BundleService } from './Bundle.service';
 
 export const BundleController = {
-  create: catchAsync(async (req, res) => {
+  create: catchAsyncWithCallback(async (req, res) => {
     const newBundle = await BundleService.create(req.body);
 
     serveResponse(res, {
       message: 'Bundle created successfully.',
       data: newBundle,
     });
-  }),
+  }, imagesUploadRollback),
 
-  update: catchAsync(async (req, res) => {
+  update: catchAsyncWithCallback(async (req, res) => {
     const updatedBundle = await BundleService.update(
       req.params.bundleId,
       req.body,
@@ -21,6 +22,14 @@ export const BundleController = {
     serveResponse(res, {
       message: 'Bundle updated successfully.',
       data: updatedBundle,
+    });
+  }, imagesUploadRollback),
+
+  delete: catchAsync(async (req, res) => {
+    await BundleService.delete(req.params.bundleId);
+
+    serveResponse(res, {
+      message: 'Bundle deleted successfully.',
     });
   }),
 };

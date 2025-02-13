@@ -28,6 +28,8 @@ adminRoutes.patch(
   BundleController.update,
 );
 
+adminRoutes.delete('/:bundleId/delete', BundleController.delete);
+
 // * admin routes -> End
 //>>>>>>>>>>>>>>>>>>>>>>>
 const customerRoutes = Router();
