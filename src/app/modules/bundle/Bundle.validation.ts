@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { z } from 'zod';
+import Product from '../product/Product.model';
 
 export const BundleValidation = {
   create: z.object({
@@ -20,9 +21,14 @@ export const BundleValidation = {
         .min(1, 'At least one image is required'),
       products: z
         .array(
-          z.string().refine(id => Types.ObjectId.isValid(id), {
-            message: 'Invalid product ID',
-          }),
+          z.string().refine(
+            async id => {
+              return await Product.exists({ _id: id });
+            },
+            {
+              message: 'Invalid product ID or product does not exist',
+            },
+          ),
         )
         .min(1, 'At least one product is required'),
       isRentable: z
@@ -69,9 +75,14 @@ export const BundleValidation = {
         .optional(),
       products: z
         .array(
-          z.string().refine(id => Types.ObjectId.isValid(id), {
-            message: 'Invalid product ID',
-          }),
+          z.string().refine(
+            async id => {
+              return await Product.exists({ _id: id });
+            },
+            {
+              message: 'Invalid product ID or product does not exist',
+            },
+          ),
         )
         .min(1, 'At least one product is required')
         .optional(),
