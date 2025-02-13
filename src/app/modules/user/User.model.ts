@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import IUser from './User.interface';
 import bcrypt from 'bcrypt';
+import validateEduEmail from '../../../util/validateEduEmail';
 
 const userSchema = new Schema<IUser>(
   {
@@ -14,6 +15,10 @@ const userSchema = new Schema<IUser>(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    isStudent: {
+      type: Boolean,
+      default: false,
+    },
     otp: { type: String },
     otpExpAt: { type: Date },
   },
@@ -23,6 +28,8 @@ const userSchema = new Schema<IUser>(
 );
 
 userSchema.pre('save', async function (next) {
+  this.isStudent = await validateEduEmail(this.email); // ! only student can sell their old products
+
   if (!this.isModified('password')) return next();
 
   try {

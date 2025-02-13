@@ -45,4 +45,5 @@ export default {
     local: process.env.LOCAL_BASE_URL,
     paypal_base_url: process.env.PAYPAL_BASE_URL,
   },
+  apyhub_api: process.env.APYHUB_API,
 };

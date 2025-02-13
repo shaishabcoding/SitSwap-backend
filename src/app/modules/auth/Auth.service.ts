@@ -42,6 +42,7 @@ export const AuthService = {
         email: user.email,
         avatar: user.avatar,
         role: user.role,
+        isStudent: user.isStudent,
       },
     };
   },
