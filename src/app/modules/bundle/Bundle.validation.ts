@@ -47,4 +47,56 @@ export const BundleValidation = {
       ]),
     }),
   }),
+
+  update: z.object({
+    body: z.object({
+      name: z.string().trim().min(1, 'Name is required').optional(),
+      description: z
+        .string()
+        .trim()
+        .min(1, 'Description is required')
+        .optional(),
+      images: z
+        .array(
+          z
+            .string()
+            .refine(
+              value => value.startsWith('http') || value.startsWith('/'),
+              { message: 'Image must be a valid URL or a file path' },
+            ),
+        )
+        .min(1, 'At least one image is required')
+        .optional(),
+      products: z
+        .array(
+          z.string().refine(id => Types.ObjectId.isValid(id), {
+            message: 'Invalid product ID',
+          }),
+        )
+        .min(1, 'At least one product is required')
+        .optional(),
+      isRentable: z
+        .union([z.boolean(), z.string()])
+        .transform(val => val === true || val === 'true')
+        .optional(),
+      isAvailable: z
+        .union([z.boolean(), z.string()])
+        .transform(val => val === true || val === 'true')
+        .optional(),
+      buy_price: z
+        .union([z.string(), z.number()])
+        .transform(val => Number(val))
+        .refine(val => val >= 0, {
+          message: 'Buy price must be a positive number',
+        })
+        .optional(),
+      rent_price: z
+        .union([z.string(), z.number()])
+        .transform(val => Number(val))
+        .refine(val => val >= 0, {
+          message: 'Rent price must be a positive number',
+        })
+        .optional(),
+    }),
+  }),
 };

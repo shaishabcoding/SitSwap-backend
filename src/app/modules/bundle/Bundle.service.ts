@@ -8,6 +8,7 @@ export const BundleService = {
   async create(bundleData: IBundle) {
     return await Bundle.create(bundleData);
   },
+
   async update(bundleId: string, updatedData: Partial<IBundle>) {
     const bundle = await Bundle.findById(bundleId);
 
