@@ -30,10 +30,7 @@ const imageUploader = (
   callback: (req: Request, images: string[]) => void,
   isOptional: boolean = false,
 ) => {
-  const baseUploadDir =
-    process.env.HOST === 'vercel'
-      ? path.join('/tmp', 'uploads')
-      : path.join(process.cwd(), 'uploads');
+  const baseUploadDir = path.join(process.cwd(), 'uploads');
 
   createDir(baseUploadDir);
 
