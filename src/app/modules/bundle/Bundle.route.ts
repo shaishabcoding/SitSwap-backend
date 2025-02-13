@@ -23,8 +23,6 @@ adminRoutes.patch(
   '/:bundleId/edit',
   imageUploader((req, images) => {
     req.body.images = images;
-
-    if (req.body.products) req.body.products = JSON.parse(req.body.products);
   }, true),
   purifyRequest(BundleValidation.update),
   BundleController.update,

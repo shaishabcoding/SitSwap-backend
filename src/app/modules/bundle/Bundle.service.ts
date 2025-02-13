@@ -29,4 +29,16 @@ export const BundleService = {
 
     return bundle;
   },
+
+  async delete(bundleId: string) {
+    const bundle = await Bundle.findByIdAndDelete(bundleId);
+
+    if (!bundle)
+      throw new ServerError(StatusCodes.NOT_FOUND, 'Bundle not found.');
+
+    // ? delete old images asynchronously
+    await Promise.all(
+      bundle.images.map(async (image: string) => await deleteFile(image)),
+    );
+  },
 };

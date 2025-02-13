@@ -74,17 +74,22 @@ export const BundleValidation = {
         .min(1, 'At least one image is required')
         .optional(),
       products: z
-        .array(
-          z.string().refine(
-            async id => {
-              return await Product.exists({ _id: id });
-            },
-            {
-              message: 'Invalid product ID or product does not exist',
-            },
-          ),
+        .union([z.string(), z.array(z.string())])
+        .transform(value =>
+          typeof value === 'string' ? JSON.parse(value) : value,
         )
-        .min(1, 'At least one product is required')
+        .refine(
+          async products => {
+            if (!Array.isArray(products)) return false;
+            const productExists = await Promise.all(
+              products.map(id => Product.exists({ _id: id })),
+            );
+            return productExists.every(Boolean);
+          },
+          {
+            message: 'Invalid product ID or product does not exist',
+          },
+        )
         .optional(),
       isRentable: z
         .union([z.boolean(), z.string()])
