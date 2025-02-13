@@ -18,6 +18,7 @@ export const ProductController = {
     serveResponse(res, {
       message: 'Product created successfully.',
       data: newProduct,
+      statusCode: StatusCodes.CREATED,
     });
   }, imagesUploadRollback),
 

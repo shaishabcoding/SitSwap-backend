@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import catchAsync, { catchAsyncWithCallback } from '../../../shared/catchAsync';
 import serveResponse from '../../../shared/serveResponse';
 import { imagesUploadRollback } from '../../middlewares/imageUploader';
@@ -10,6 +11,7 @@ export const BundleController = {
     serveResponse(res, {
       message: 'Bundle created successfully.',
       data: newBundle,
+      statusCode: StatusCodes.CREATED,
     });
   }, imagesUploadRollback),
 

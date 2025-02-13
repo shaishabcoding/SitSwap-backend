@@ -14,7 +14,7 @@ export const UserController = {
 
     sendResponse(res, {
       success: true,
-      statusCode: StatusCodes.OK,
+      statusCode: StatusCodes.CREATED,
       message: 'User register successfully.',
       data: newUser,
     });
