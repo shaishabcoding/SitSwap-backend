@@ -5,18 +5,30 @@ import { UserService } from './User.service';
 import { imagesUploadRollback } from '../../middlewares/imageUploader';
 import ServerError from '../../../errors/ServerError';
 import config from '../../../config';
+import { AuthService } from '../auth/Auth.service';
 
 export const UserController = {
   register: catchAsyncWithCallback(async (req, res) => {
-    const userData = req.body;
+    await UserService.register(req.body);
 
-    const newUser = await UserService.register(userData);
+    const { token, user } = await AuthService.login(
+      req.body.email,
+      req.body.password,
+    );
+
+    res.cookie('refreshToken', token.refreshToken, {
+      secure: config.node_env !== 'development',
+      httpOnly: true,
+    });
 
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.CREATED,
       message: 'User register successfully.',
-      data: newUser,
+      data: {
+        accessToken: token.accessToken,
+        user,
+      },
     });
   }, imagesUploadRollback),
 
