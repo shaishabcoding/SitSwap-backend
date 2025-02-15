@@ -38,6 +38,7 @@ userRoutes.delete(
 );
 
 userRoutes.get('/', ProductController.list);
+userRoutes.get('/:productId', ProductController.retrieve);
 userRoutes.get('/retrieve-by-ids', ProductController.retrieveByIds);
 
 export const ProductRoutes = {

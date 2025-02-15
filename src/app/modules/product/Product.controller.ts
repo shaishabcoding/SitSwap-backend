@@ -79,4 +79,14 @@ export const ProductController = {
       data: products,
     });
   }),
+
+  retrieve: catchAsync(async (req, res) => {
+    const { data, meta } = await ProductService.retrieve(req);
+
+    serveResponse(res, {
+      message: 'Product retrieved successfully.',
+      meta,
+      data,
+    });
+  }),
 };
