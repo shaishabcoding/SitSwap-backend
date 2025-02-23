@@ -27,7 +27,7 @@ export const BundleService = {
     const bundles = await Bundle.find()
       .limit(+limit)
       .skip((+page - 1) * +limit)
-      .select('name banner');
+      .select('name banner slug');
 
     return bundles as TBundle[];
   },
