@@ -26,11 +26,13 @@ adminRoutes.patch(
 
 adminRoutes.delete('/:productId/delete', ProductController.delete);
 
-const userRoutes = Router();
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-userRoutes.get('/', ProductController.list);
+const customerRoutes = Router();
+
+customerRoutes.get('/', ProductController.list);
 
 export const ProductRoutes = {
   adminRoutes,
-  userRoutes,
+  customerRoutes,
 };
