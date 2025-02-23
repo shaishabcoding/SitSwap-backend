@@ -63,8 +63,17 @@ const bundleSchema = new Schema<TBundle>(
   },
 );
 
-bundleSchema.pre('validate', function (next) {
-  if (this.name) this.slug = slugify(this.name, { lower: true, strict: true });
+bundleSchema.pre('validate', async function (next) {
+  if (this.name) {
+    const baseSlug = slugify(this.name, { lower: true, strict: true });
+    let newSlug = baseSlug,
+      count = 1;
+
+    while (await Bundle.exists({ slug: newSlug }))
+      newSlug = `${baseSlug}-${++count}`;
+
+    this.slug = newSlug;
+  }
 
   next();
 });
