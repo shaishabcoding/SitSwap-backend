@@ -31,10 +31,10 @@ const bundleSchema = new Schema<TBundle>(
         required: true,
       },
     ],
-    buy_price: {
+    buyPrice: {
       type: Number,
     },
-    rent_price: {
+    rentPrice: {
       type: Number,
     },
     stock: {

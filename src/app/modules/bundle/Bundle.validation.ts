@@ -14,12 +14,27 @@ export const BundleValidation = {
         )
         .min(1, 'At least one product is required')
         .nonempty('Products cannot be empty'),
-      buy_price: z.number().optional(),
-      rent_price: z.number().optional(),
-      stock: z.number().min(1, 'Stock must be at least 1'),
-      isAvailable: z.boolean().optional(),
-      isRentable: z.boolean().optional(),
-      additional: z.record(z.string()),
+      buyPrice: z
+        .string()
+        .transform(val => Number(val))
+        .optional(),
+      rentPrice: z
+        .string()
+        .transform(val => Number(val))
+        .optional(),
+      stock: z
+        .string()
+        .transform(val => Number(val))
+        .refine(val => val >= 1, { message: 'Stock must be at least 1' }),
+      isAvailable: z
+        .string()
+        .transform(val => val === 'true')
+        .optional(),
+      isRentable: z
+        .string()
+        .transform(val => val === 'true')
+        .optional(),
+      additional: z.record(z.string()).optional(),
     }),
   }),
 
@@ -34,11 +49,26 @@ export const BundleValidation = {
           }),
         )
         .optional(),
-      buy_price: z.number().optional(),
-      rent_price: z.number().optional(),
-      stock: z.number().optional(),
-      isAvailable: z.boolean().optional(),
-      isRentable: z.boolean().optional(),
+      buyPrice: z
+        .string()
+        .transform(val => Number(val))
+        .optional(),
+      rentPrice: z
+        .string()
+        .transform(val => Number(val))
+        .optional(),
+      stock: z
+        .string()
+        .transform(val => Number(val))
+        .optional(),
+      isAvailable: z
+        .string()
+        .transform(val => val === 'true')
+        .optional(),
+      isRentable: z
+        .string()
+        .transform(val => val === 'true')
+        .optional(),
       additional: z.record(z.string()).optional(),
     }),
   }),

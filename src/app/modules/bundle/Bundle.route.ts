@@ -10,6 +10,11 @@ adminRoutes.post(
   '/create',
   imageUploader((req, images) => {
     req.body.banner = images[0];
+
+    req.body.products = JSON.parse(req.body.products);
+    req.body.additional = JSON.parse(req.body.additional);
+
+    req.body.user = req.user!._id;
   }),
   validateRequest(BundleValidation.create),
   BundleController.create,

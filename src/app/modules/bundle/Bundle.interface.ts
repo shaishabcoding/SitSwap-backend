@@ -5,8 +5,8 @@ type TBundle = {
   description: string;
   banner: string;
   products: string[];
-  buy_price: number;
-  rent_price: number;
+  buyPrice: number;
+  rentPrice: number;
   slug: string;
   stock: number;
   isAvailable: boolean;
