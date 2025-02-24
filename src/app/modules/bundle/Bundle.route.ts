@@ -3,6 +3,9 @@ import { BundleController } from './Bundle.controller';
 import validateRequest from '../../middlewares/validateRequest';
 import { BundleValidation } from './Bundle.validation';
 import imageUploader from '../../middlewares/imageUploader';
+import auth from '../../middlewares/auth';
+import { ReviewController } from '../review/Review.controller';
+import { ReviewValidation } from '../review/Review.validation';
 
 const adminRoutes = Router();
 
@@ -38,5 +41,12 @@ const customerRoutes = Router();
 customerRoutes.get('/', BundleController.list);
 
 customerRoutes.get('/:slug', BundleController.retrieve);
+
+customerRoutes.patch(
+  '/:bundleSlug/review',
+  auth('admin', 'user'),
+  validateRequest(ReviewValidation.store),
+  ReviewController.store,
+);
 
 export const BundleRoutes = { adminRoutes, customerRoutes };
