@@ -54,5 +54,7 @@ export const BundleService = {
     const bundle = await Bundle.findByIdAndDelete(bundleId);
 
     if (!bundle) throw new ApiError(StatusCodes.NOT_FOUND, 'Bundle not found.');
+
+    if (bundle.banner) await deleteFile(bundle.banner);
   },
 };
