@@ -35,9 +35,17 @@ export const BundleService = {
   async retrieve(slug: string) {
     const bundle = await Bundle.findOne({
       slug,
-    });
+    })
+      .populate('products', 'name images')
+      .lean();
 
     if (!bundle) throw new ApiError(StatusCodes.NOT_FOUND, 'Bundle not found.');
+
+    // ? array is reference type
+    bundle.products.forEach((product: any) => {
+      product.image = product.images[0];
+      delete product.images;
+    });
 
     return bundle as TBundle;
   },
