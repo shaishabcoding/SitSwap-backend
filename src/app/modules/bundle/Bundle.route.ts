@@ -43,10 +43,16 @@ customerRoutes.get('/', BundleController.list);
 customerRoutes.get('/:slug', BundleController.retrieve);
 
 customerRoutes.patch(
-  '/:bundleSlug/review',
+  '/:bundleSlug/reviews/store',
   auth('admin', 'user'),
   validateRequest(ReviewValidation.store),
   ReviewController.store,
+);
+
+customerRoutes.get(
+  '/:slug/reviews',
+  ({ body, params }, _, next) => ((body.bundle = params.slug), next()),
+  ReviewController.list,
 );
 
 export const BundleRoutes = { adminRoutes, customerRoutes };

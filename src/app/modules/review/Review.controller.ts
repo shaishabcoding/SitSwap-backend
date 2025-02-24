@@ -20,7 +20,7 @@ export const ReviewController = {
   }),
 
   list: catchAsync(async (req, res) => {
-    const reviews = await ReviewService.list(req.params.productName, req.query);
+    const reviews = await ReviewService.list(req.body, req.query);
 
     sendResponse(res, {
       success: true,
