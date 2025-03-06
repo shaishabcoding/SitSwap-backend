@@ -10,7 +10,7 @@ export const ProductController = {
   create: catchAsyncWithCallback(async (req, res) => {
     const productData = {
       ...req.body,
-      user: req.user!._id, // * track the user
+      user: req.user!._id,
     };
 
     const newProduct = await ProductService.create(productData);
@@ -46,7 +46,7 @@ export const ProductController = {
     const { products, meta } = await ProductService.list(req.query);
 
     serveResponse(res, {
-      message: 'Product deleted successfully.',
+      message: 'Products retrieved successfully.',
       meta,
       data: products,
     });

@@ -10,4 +10,6 @@ router.use(auth('admin')); // ! make sure this is admin 🙃
 router.use('/products', ProductRoutes.adminRoutes);
 router.use('/bundles', BundleRoutes.adminRoutes);
 
+router.use('/bundles', BundleRoutes.adminRoutes);
+
 export const AdminRoutes = router;
